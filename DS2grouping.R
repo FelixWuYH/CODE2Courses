@@ -5,7 +5,7 @@ rm(list=ls())
 # Input CSV file: M*N data frame
 # M rows where M > G1.no
 # N columns
-G1.no = 13  # <== the amount of non-class students A:13, B:17
+G1.no = 17  # <== the amount of non-class students A:13, B:17
 df <- read.csv(choose.files())
 # View(df)
 G1 <- df[1:G1.no,]
@@ -81,11 +81,11 @@ if (!require(maotai)) {
 }
 groupID <- kmeanspp(as.matrix(classS),group.no)
 listID <- rep(0,dim(classS)[1])
-for(ID in (group.no:1)) {
+for(ID in (1:group.no)) {
   # ID = group.no
   idx <- which(groupID==ID)
   if ((length(idx) %% 2) == 1) {
-    groupID[ idx[length(idx)/2] ] <- ID - 1
+    groupID[ idx[length(idx)/2] ] <- ID + 1
     idx <- idx[-(length(idx)/2)]
   }
   newP.no <- ceiling(length(idx) / 2)
@@ -104,6 +104,6 @@ result <- result[,c(1,ncol(result))]
 # View(result)
 write.csv(result,"output.csv", row.names=FALSE)
 #
-shell.exec("output.csv")
+# shell.exec("output.csv")
 ### ===============================
 ### ===============================
