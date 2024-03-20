@@ -16,10 +16,10 @@ classS <- df[(G1.no+1):dim(df)[1],]
 pair.no <- ceiling(G1.no / 2)
 pairID <- as.vector(t(matrix(rep(1:pair.no,2),pair.no,2)))
 newG1 <- cbind(G1,ID=pairID[sample(G1.no)])
+# print(newG1)
+print(c(G1.no,pair.no))
 # View(newG1)
-
 ### Deciding the number of clusters for class students
-set.seed(42) # 確保結果可重現
 
 ## 1. Silhouette method
 if(!require(cluster)) {
@@ -38,9 +38,9 @@ for(k in 2:10) {
     best_sil_width <- sil_width
     best_k <- k
   }
-  cat("For k=", k, ", silhouette width is ", sil_width, "\n", sep="")
+#  cat("For k=", k, ", silhouette width is ", sil_width, "\n", sep="")
 }
-cat("Best k is ", best_k, " with a silhouette width of ", best_sil_width, "\n")
+# cat("Best k is ", best_k, " with a silhouette width of ", best_sil_width, "\n")
 
 ## 2. Elbow method
 if(!require(factoextra)){
@@ -59,19 +59,19 @@ if(!require(cluster)) {
   install.pagkages("cluster")
   library(cluster)
 }
-# set.seed(123) # 確保結果可重現
+set.seed(Sys.time())
+
 # 計算Gap Statistic
 gap_stat <- clusGap(classS, FUN = kmeans, nstart = 25, K.max = 10, B = 50)
 
 # 找出最佳的分群數量
 best_k2 <- maxSE(gap_stat$Tab[, "gap"], gap_stat$Tab[, "SE.sim"], method = "Tibs2001SEmax")
 
-# 打印最佳分群數量
-print(best_k2)
 # 可以使用以下代碼來繪製Gap Statistic的結果圖
 # plot(gap_stat, main = "Gap Statistic for K-means Clustering")
 
-(group.no <- max(best_k, best_k2)) # <== the number clusters
+group.no <- max(best_k, best_k2) # <== the number clusters
+print(c(best_k,best_k2))
 #=========================
 
 ### clustering of class
@@ -89,16 +89,20 @@ for(ID in (group.no:1)) {
     idx <- idx[-(length(idx)/2)]
   }
   newP.no <- ceiling(length(idx) / 2)
+  print(c(length(idx),newP.no))
   pairID <- pair.no + as.vector(t(matrix(rep(1:newP.no,2),newP.no,2)))
   listID[idx] <- pairID[sample(length(idx))]
   pair.no <- pair.no + newP.no
 }
 newClass <- cbind(classS,ID=listID)
+# print(newClass)
 # View(newClass)
 result <- rbind(newG1,newClass)
-result$ID <- dim(df)[1]/2 - result$ID + 1
-View(result[,c(1,ncol(result))])
-write.csv(result[,c(1,ncol(result))],"output.csv", row.names=FALSE)
+result$ID <- ceiling(dim(df)[1]/2) - result$ID + 1
+# reverse the numbering
+result <- result[,c(1,ncol(result))]
+# View(result)
+write.csv(result,"output.csv", row.names=FALSE)
 #
 shell.exec("output.csv")
 ### ===============================
