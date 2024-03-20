@@ -4,8 +4,8 @@
 - Goal: assign students into clusters and then divide the ones in the same cluster into pairs
 - Input: a list of students without identifiers but with serial numbers and behavioral descriptors 
 - Output: each serial number corresponding to a unique pair identifier
-
-* The following text came from the comments of ChatGPT...
+--
+### The following text came from the comments of ChatGPT...
 DS2grouping.R Script Overview
 Objective: The primary aim of the DS2grouping.R script is to efficiently organize students into optimally homogenous clusters based on behavioral descriptors. Following cluster formation, the script aims to pair students within each cluster, facilitating a collaborative learning environment tailored to their behavioral profiles.
 
