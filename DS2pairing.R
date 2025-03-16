@@ -64,7 +64,7 @@ paired_data <- paired_data %>%
 # View(paired_data)
 
 # 將結果輸出為 CSV 檔案
-write.csv(paired_data, "paired_result.csv", row.names = FALSE)
+write.csv(paired_data, "paired_result.csv", row.names = FALSE, fileEncoding = "Big5")
 
 # 顯示結果
 print(paired_data)
