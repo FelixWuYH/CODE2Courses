@@ -15,7 +15,7 @@ data <- df
 library(dplyr)
 
 # 設定 N，確保為偶數
-# set.seed(123)  # 設定隨機種子，確保結果可重現
+set.seed(321)  # 設定隨機種子，確保結果可重現
 N <- nrow(data)  # 必須為偶數
 
 # 第一次隨機分配整數欄位
@@ -26,6 +26,13 @@ data <- data %>%
 # View(data)
 
 # 第二次隨機分配整數欄位
+data <- data %>%
+  mutate(RandomOrder = sample(1:N, N)) %>%
+  arrange(RandomOrder) %>%
+  select(-RandomOrder)  # 排序後刪除該欄位
+# View(data)
+
+# 第三次隨機分配整數欄位
 data <- data %>%
   mutate(RandomOrder = sample(1:N, N)) %>%
   arrange(RandomOrder) %>%
@@ -64,7 +71,7 @@ paired_data <- paired_data %>%
 # View(paired_data)
 
 # 將結果輸出為 CSV 檔案
-write.csv(paired_data, "paired_result.csv", row.names = FALSE)
+write.csv(paired_data, "paired_result.csv", row.names = FALSE, fileEncoding = "Big5")
 
 # 顯示結果
 print(paired_data)
